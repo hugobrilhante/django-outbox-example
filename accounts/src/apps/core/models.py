@@ -6,5 +6,6 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         publisher = build_publisher()
-        publisher.send(queue="/queue/user-created", body={"description": f"Recommendation to {self.username}"})
+        publisher.send(queue="/topic/VirtualTopic.user-created",
+                       body={"description": f"Recommendation to {self.username}"})
         super().save(*args, **kwargs)
