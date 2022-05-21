@@ -1,0 +1,71 @@
+version: "3.9"
+
+x-environment:
+  &default-environment
+  - POSTGRES_DB=db
+  - POSTGRES_USER=user
+  - POSTGRES_PASSWORD=password
+
+services:
+  user-db:
+    image: postgres
+    ports:
+      - "5431:5432"
+    environment: *default-environment
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  user-api:
+    build:
+      context: .
+      dockerfile: user-api/Dockerfile
+    command: [ './commands.sh' ]
+    volumes:
+      - ./user-api:/app
+    env_file:
+      - user-api/.env
+    ports:
+      - "8000:8000"
+    depends_on:
+      user-db:
+        condition: service_healthy
+  recommendations-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment: *default-environment
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  recommendations-api:
+    build:
+      context: .
+      dockerfile: recommendations-api/Dockerfile
+    command: [ './commands.sh' ]
+    volumes:
+      - ./recommendations-api:/app
+    env_file:
+      - recommendations-api/.env
+    ports:
+      - "8001:8000"
+    depends_on:
+      recommendations-db:
+        condition: service_healthy
+  rabbitmq:
+    build:
+      context: ./rabbitmq
+    restart: always
+    ports:
+      - 15672:15672
+      - 5672:5672
+    networks:
+      - outbox-network
+volumes:
+  data:
+networks:
+  outbox-network:
+    driver: bridge

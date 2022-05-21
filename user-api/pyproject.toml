@@ -1,0 +1,67 @@
+[tool.poetry]
+name = "another-django-template"
+version = "2.0.0"
+description = ""
+authors = ["Hugo Brilhante <hugobrilhante@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+django = "~3.2"
+django-configurations = "~2.2"
+django-cache-url = "~3.2.3"
+dj-database-url = "~0.5.0"
+dj-email-url = "~1.0.2"
+gunicorn = "~20.1.0"
+psycopg2 = "~2.8.6"
+whitenoise = "~5.2.0"
+gevent = "^21.12.0"
+
+[tool.poetry.dev-dependencies]
+coverage = {extras = ["toml"], version = "^5.5"}
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = 'True'
+force_grid_wrap = 0
+use_parentheses = 'True'
+ensure_newline_before_comments = 'True'
+line_length = 120
+
+[tool.pylint.master]
+ignore = [
+    "asgi.py",
+    "wsgi.py",
+    "manage.py"
+]
+
+[tool.pylint.messages_control]
+disable = [
+    "no-init",
+    "bad-continuation",
+    "bad-whitespace",
+    "missing-module-docstring",
+    "missing-class-docstring"
+]
+
+[tool.coverage.run]
+omit =[
+  "*migrations/*",
+  "*tests/*",
+  "*apps.py",
+  "*urls.py",
+  "*asgi.py",
+  "*wsgi.py",
+  "*conftest.py",
+  "*settings.py",
+  "manage.py"
+]
+
+[tool.pylint.format]
+max-line-length = "120"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

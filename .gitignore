@@ -1,0 +1,25 @@
+# IntelliJ project files
+.idea
+
+# Environments
+.venv
+user-api/.env
+
+# Mypy
+.mypy_cache
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Django
+*.sqlite3
+
+#Mac OS
+.DS_Store
+
+# Coverage
+htmlcov
+.pytest_cache
+.coverage
