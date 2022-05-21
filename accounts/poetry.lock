@@ -94,6 +94,27 @@ search = ["dj-search-url"]
 testing = ["django-discover-runner", "mock", "django-cache-url (>=1.0.0)", "dj-database-url", "dj-email-url", "dj-search-url", "Sphinx (>=1.4)"]
 
 [[package]]
+name = "django-stomp"
+version = "5.0.0"
+description = "A simple implementation of STOMP with Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+request-id-django-log = "0.1.1"
+"stomp.py" = ">=7.0,<8.0"
+tenacity = ">=8.0,<9.0"
+
+[[package]]
+name = "docopt"
+version = "0.6.2"
+description = "Pythonic argument parser, that will make you smile"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "gevent"
 version = "21.12.0"
 description = "Coroutine-based network library"
@@ -164,6 +185,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "request-id-django-log"
+version = "0.1.1"
+description = "A simple way to implement request_id in Django"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -178,6 +207,28 @@ description = "A non-validating SQL parser."
 category = "main"
 optional = false
 python-versions = ">=3.5"
+
+[[package]]
+name = "stomp.py"
+version = "7.0.0"
+description = "Python STOMP client, supporting versions 1.0, 1.1 and 1.2 of the protocol"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4.0"
+
+[package.dependencies]
+docopt = ">=0.6.2,<0.7.0"
+
+[[package]]
+name = "tenacity"
+version = "8.0.1"
+description = "Retry code until it succeeds"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.extras]
+doc = ["reno", "sphinx", "tornado (>=4.5)"]
 
 [[package]]
 name = "toml"
@@ -226,7 +277,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "5140f06ca54b3a71b67d0d7523768f81b62893bb16a1b5d5dd42cfcf36540d5e"
+content-hash = "5931cb275e9c12161ccf5e1d5144fe8b2372509f9f0f1d1c012058d022796887"
 
 [metadata.files]
 asgiref = [
@@ -359,6 +410,13 @@ django-configurations = [
     {file = "django-configurations-2.2.tar.gz", hash = "sha256:9e3bcea1355ac50a4c9f854f751d214cb17e5f8adf18405a4488d0a1e8945915"},
     {file = "django_configurations-2.2-py2.py3-none-any.whl", hash = "sha256:0b93cb7042739e2d69cfc6fb81676bbd3cbb63ea19b02e8b681f4cad3a8aaf1b"},
 ]
+django-stomp = [
+    {file = "django-stomp-5.0.0.tar.gz", hash = "sha256:9c76fd47f44363fbbfcd284dd85fdafd57cb8c154bb3ba52bea506923ca47139"},
+    {file = "django_stomp-5.0.0-py3-none-any.whl", hash = "sha256:02306f8ebbf8e02687b83073c26d215ef32c935da473ffdd0b82f0e0c00c96fd"},
+]
+docopt = [
+    {file = "docopt-0.6.2.tar.gz", hash = "sha256:49b3a825280bd66b3aa83585ef59c4a8c82f2c8a522dbe754a8bc8d08c85c491"},
+]
 gevent = [
     {file = "gevent-21.12.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:2afa3f3ad528155433f6ac8bd64fa5cc303855b97004416ec719a6b1ca179481"},
     {file = "gevent-21.12.0-cp27-cp27m-win32.whl", hash = "sha256:177f93a3a90f46a5009e0841fef561601e5c637ba4332ab8572edd96af650101"},
@@ -480,6 +538,10 @@ pytz = [
     {file = "pytz-2021.3-py2.py3-none-any.whl", hash = "sha256:3672058bc3453457b622aab7a1c3bfd5ab0bdae451512f6cf25f64ed37f5b87c"},
     {file = "pytz-2021.3.tar.gz", hash = "sha256:acad2d8b20a1af07d4e4c9d2e9285c5ed9104354062f275f3fcd88dcef4f1326"},
 ]
+request-id-django-log = [
+    {file = "request_id_django_log-0.1.1-py3-none-any.whl", hash = "sha256:b202535be8de5f9568686344f71a19b899ec021f216f61d1313de871959021b1"},
+    {file = "request_id_django_log-0.1.1.tar.gz", hash = "sha256:63e636dc73c529e98fb4588eb79ee1b2778ca5b0d6abb7f2221167a8c94c5eef"},
+]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
@@ -487,6 +549,14 @@ six = [
 sqlparse = [
     {file = "sqlparse-0.4.2-py3-none-any.whl", hash = "sha256:48719e356bb8b42991bdbb1e8b83223757b93789c00910a616a071910ca4a64d"},
     {file = "sqlparse-0.4.2.tar.gz", hash = "sha256:0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae"},
+]
+"stomp.py" = [
+    {file = "stomp.py-7.0.0-py3-none-any.whl", hash = "sha256:6e1d93f2b2a7c63301f3e09e7ffa82ea80affec59164cd8c9b7807af4fe0e732"},
+    {file = "stomp.py-7.0.0.tar.gz", hash = "sha256:fb301f338292b1b95089c6f1d3a38a9dd8353a5ff3f921e389dfa5f9413b5a8a"},
+]
+tenacity = [
+    {file = "tenacity-8.0.1-py3-none-any.whl", hash = "sha256:f78f4ea81b0fabc06728c11dc2a8c01277bfc5181b321a4770471902e3eb844a"},
+    {file = "tenacity-8.0.1.tar.gz", hash = "sha256:43242a20e3e73291a28bcbcacfd6e000b02d3857a9a9fff56b297a27afdc932f"},
 ]
 toml = [
     {file = "toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b"},

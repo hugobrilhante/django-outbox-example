@@ -40,6 +40,8 @@ class Base(Configuration):
         "django.contrib.sessions",
         "django.contrib.messages",
         "django.contrib.staticfiles",
+        # Third apps
+        "django_stomp",
         # App locals
         "src.apps.core.apps.CoreConfig",
     ]
@@ -122,6 +124,12 @@ class Base(Configuration):
 
     AUTH_USER_MODEL = "core.User"
 
+    STOMP_SERVER_HOST = values.Value("rabbitmq")
+    STOMP_SERVER_PORT = values.Value("61613")
+    STOMP_SERVER_USER = values.Value("guest")
+    STOMP_SERVER_PASSWORD = values.Value("guest")
+    STOMP_USE_SSL = values.BooleanValue(False)
+
 
 class Dev(Base):
     # See https://docs.djangoproject.com/en/2.2/topics/cache/#dummy-caching-for-development
@@ -132,3 +140,6 @@ class Dev(Base):
 
 class Prod(Base):
     pass
+
+
+#  python manage.py pubsub "/queue/user-created" src.apps.publisher.my_honest_logic

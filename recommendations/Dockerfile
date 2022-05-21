@@ -6,7 +6,7 @@ ENV DJANGO_SETTINGS_MODULE "src.settings"
 
 WORKDIR /app
 
-COPY ./recommendations-api .
+COPY ./recommendations .
 
 RUN pip install poetry
 

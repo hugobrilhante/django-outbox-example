@@ -3,7 +3,6 @@
 
 # Environments
 .venv
-user-api/.env
 
 # Mypy
 .mypy_cache
