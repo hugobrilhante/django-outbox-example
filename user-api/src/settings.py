@@ -120,6 +120,8 @@ class Base(Configuration):
 
     DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+    AUTH_USER_MODEL = "core.User"
+
 
 class Dev(Base):
     # See https://docs.djangoproject.com/en/2.2/topics/cache/#dummy-caching-for-development
