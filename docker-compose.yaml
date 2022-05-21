@@ -7,7 +7,7 @@ x-environment:
 
 x-healthcheck:
   &default-healthcheck
-    test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+    test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
     interval: 10s
     timeout: 5s
     retries: 5
@@ -30,7 +30,7 @@ services:
     build:
       context: .
       dockerfile: accounts/Dockerfile
-    command: [ './commands.sh' ]
+    command: [ './commands.sh', ]
     volumes:
       - ./accounts:/app
     env_file:
@@ -41,6 +41,7 @@ services:
       accounts_db:
         condition: service_healthy
     networks: *default-networks
+
 # Recommendations applications
   recommendations_db:
     image: postgres
@@ -49,11 +50,21 @@ services:
     environment: *default-environment
     healthcheck: *default-healthcheck
     networks: *default-networks
+  recommendations_consumer:
+    build:
+      context: .
+      dockerfile: recommendations/Dockerfile
+    command: 'python manage.py pubsub "/queue/user-created" src.apps.core.pubsub.create_recommendation'
+    volumes:
+      - ./recommendations:/app
+    env_file:
+      - recommendations/.env
+    networks: *default-networks
   recommendations:
     build:
       context: .
       dockerfile: recommendations/Dockerfile
-    command: [ './commands.sh' ]
+    command: [ './commands.sh']
     volumes:
       - ./recommendations:/app
     env_file:
@@ -64,6 +75,7 @@ services:
       recommendations_db:
         condition: service_healthy
     networks: *default-networks
+
 
 # RabbitMQ applications
   rabbitmq:
@@ -76,6 +88,7 @@ services:
       - "61613:61613"
     networks: *default-networks
 
+# Networks
 networks:
   outbox-network:
     driver: bridge
