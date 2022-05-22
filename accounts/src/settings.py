@@ -44,6 +44,7 @@ class Base(Configuration):
         "django_stomp",
         # App locals
         "src.apps.core.apps.CoreConfig",
+        "src.apps.outbox.apps.OutboxConfig",
     ]
 
     MIDDLEWARE = [

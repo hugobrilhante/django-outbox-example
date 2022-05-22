@@ -18,7 +18,7 @@ x-networks:
 
 services:
 
-# User applications
+# Account applications
   accounts_db:
     image: postgres
     ports:
@@ -26,11 +26,24 @@ services:
     environment: *default-environment
     healthcheck: *default-healthcheck
     networks: *default-networks
+  accounts_publisher:
+    build:
+      context: .
+      dockerfile: accounts/Dockerfile
+    command: "python manage.py publisher"
+    volumes:
+      - ./accounts:/app
+    env_file:
+      - accounts/.env
+    depends_on:
+      accounts_db:
+        condition: service_healthy
+    networks: *default-networks
   accounts:
     build:
       context: .
       dockerfile: accounts/Dockerfile
-    command: [ './commands.sh', ]
+    command: ['./commands.sh']
     volumes:
       - ./accounts:/app
     env_file:
@@ -54,7 +67,7 @@ services:
     build:
       context: .
       dockerfile: recommendations/Dockerfile
-    command: 'python manage.py pubsub "/topic/VirtualTopic.user-created" src.apps.core.pubsub.create_recommendation'
+    command: "python manage.py pubsub '/topic/VirtualTopic.user-created' src.apps.core.pubsub.create_recommendation"
     volumes:
       - ./recommendations:/app
     env_file:
@@ -64,7 +77,7 @@ services:
     build:
       context: .
       dockerfile: recommendations/Dockerfile
-    command: [ './commands.sh']
+    command: ['./commands.sh']
     volumes:
       - ./recommendations:/app
     env_file:
@@ -83,7 +96,6 @@ services:
       context: ./rabbitmq
     restart: always
     ports:
-      - "5672:5672"
       - "15672:15672"
       - "61613:61613"
     networks: *default-networks

@@ -1,6 +1,0 @@
-BIND = "0.0.0.0:8000"
-WORKERS = 2
-WORKER_CLASS = "gthread"
-WORKER_TMP_DIR = "/dev/shm"
-THREADS = 4
-LOG_FILE = "-"

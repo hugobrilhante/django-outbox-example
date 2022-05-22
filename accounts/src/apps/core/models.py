@@ -1,11 +1,16 @@
 from django.contrib.auth.models import AbstractUser
-from django_stomp.builder import build_publisher
+from django.db import transaction
+
+from src.apps.outbox.models import Outbox
 
 
 class User(AbstractUser):
 
     def save(self, *args, **kwargs):
-        publisher = build_publisher()
-        publisher.send(queue="/topic/VirtualTopic.user-created",
-                       body={"description": f"Recommendation to {self.username}"})
-        super().save(*args, **kwargs)
+        with transaction.atomic():
+            outbox = Outbox(
+                queue="/topic/VirtualTopic.user-created",
+                body={"description": f"Recommendation to {self.username}"}
+            )
+            outbox.save()
+            super().save(*args, **kwargs)
