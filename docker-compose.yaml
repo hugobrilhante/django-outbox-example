@@ -72,9 +72,7 @@ services:
       - ./recommendations:/app
     env_file:
       - recommendations/.env
-    depends_on:
-      rabbitmq:
-        condition: service_healthy
+    restart: on-failure
     networks: *default-networks
   recommendations:
     build:
@@ -101,11 +99,6 @@ services:
     ports:
       - "15672:15672"
       - "61613:61613"
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
-      interval: 30s
-      timeout: 10s
-      retries: 5
     networks: *default-networks
 
 # Networks
