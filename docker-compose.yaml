@@ -5,8 +5,8 @@ x-environment:
   &default-environment
     - POSTGRES_PASSWORD=qwerty
 
-x-healthcheck:
-  &default-healthcheck
+x-healthcheck-db:
+  &default-healthcheck-db
     test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
     interval: 10s
     timeout: 5s
@@ -24,7 +24,7 @@ services:
     ports:
       - "5431:5432"
     environment: *default-environment
-    healthcheck: *default-healthcheck
+    healthcheck: *default-healthcheck-db
     networks: *default-networks
   accounts_publisher:
     build:
@@ -61,7 +61,7 @@ services:
     ports:
       - "5432:5432"
     environment: *default-environment
-    healthcheck: *default-healthcheck
+    healthcheck: *default-healthcheck-db
     networks: *default-networks
   recommendations_consumer:
     build:
@@ -72,6 +72,9 @@ services:
       - ./recommendations:/app
     env_file:
       - recommendations/.env
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
     networks: *default-networks
   recommendations:
     build:
@@ -98,6 +101,11 @@ services:
     ports:
       - "15672:15672"
       - "61613:61613"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
     networks: *default-networks
 
 # Networks
