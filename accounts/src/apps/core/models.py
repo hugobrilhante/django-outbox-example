@@ -1,16 +1,9 @@
+from functools import partial
+
 from django.contrib.auth.models import AbstractUser
-from django.db import transaction
-
-from src.apps.outbox.models import Outbox
+from src.apps.outbox.models import with_outbox
 
 
+@with_outbox("/topic/VirtualTopic.user-created.v1")
 class User(AbstractUser):
-
-    def save(self, *args, **kwargs):
-        with transaction.atomic():
-            outbox = Outbox(
-                queue="/topic/VirtualTopic.user-created",
-                body={"description": f"Recommendation to {self.username}"}
-            )
-            outbox.save()
-            super().save(*args, **kwargs)
+    pass
