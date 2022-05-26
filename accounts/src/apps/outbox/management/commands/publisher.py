@@ -3,7 +3,8 @@ from time import sleep
 from django.core.management.base import BaseCommand
 from django.db import DatabaseError
 from django_stomp.builder import build_publisher
-from src.apps.core.models import Outbox
+from src.apps.outbox.models import Published
+from src.apps.outbox.models import StatusChoice
 
 
 class Command(BaseCommand):
@@ -14,12 +15,12 @@ class Command(BaseCommand):
         publisher = build_publisher()
         while True:
             try:
-                outboxes = Outbox.objects.filter(sent=False)
-                for outbox in outboxes:
-                    publisher.send(queue=outbox.queue, body=outbox.body)
-                    outbox.sent = True
-                    outbox.save()
-                    self.stdout.write(self.style.SUCCESS(f"{outbox.body} published"))
+                published = Published.objects.filter(status=StatusChoice.SCHEDULE)
+                for pub in published:
+                    publisher.send(queue=pub.name, body=pub.content)
+                    pub.status = StatusChoice.SUCCEEDED
+                    pub.save()
+                    self.stdout.write(self.style.SUCCESS(f"{pub.content} published"))
             except DatabaseError:
                 self.stdout.write(self.style.SUCCESS(f"Starting publisher..."))
             else:

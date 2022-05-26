@@ -67,7 +67,7 @@ services:
     build:
       context: .
       dockerfile: recommendations/Dockerfile
-    command: "python manage.py pubsub '/topic/VirtualTopic.user-created' src.apps.core.pubsub.create_recommendation"
+    command: "python manage.py pubsub '/topic/VirtualTopic.user-created.v1' src.apps.core.consumer.create_recommendation"
     volumes:
       - ./recommendations:/app
     env_file:

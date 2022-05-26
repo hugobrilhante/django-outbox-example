@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
 
-from ..models import Outbox
+from ..models import Published
 from ..models import with_outbox
 
 User = get_user_model()
@@ -12,9 +12,9 @@ class WithOutBoxTestCase(TestCase):
 
     def test_when_is_correct_queue_name(self):
         queue_name = 'queue'
-        use_with_outbox = with_outbox(queue=queue_name)(User)
-        use_with_outbox.objects.create(username='test')
-        self.assertEqual(Outbox.objects.get().queue, queue_name)
+        user_with_outbox = with_outbox(name=queue_name)(User)
+        user_with_outbox.objects.create(username='test')
+        self.assertEqual(Published.objects.get().name, f"{queue_name}.v1")
 
     def test_when_no_has_specified_field(self):
         date_joined = timezone.now()
@@ -33,9 +33,9 @@ class WithOutBoxTestCase(TestCase):
             'user_permissions': []
         }
 
-        use_with_outbox = with_outbox(queue='queue')(User)
+        use_with_outbox = with_outbox(name='queue')(User)
         use_with_outbox.objects.create(username='test', date_joined=date_joined)
-        fields = Outbox.objects.get().body[0]['fields']
+        fields = Published.objects.get().content['fields']
         self.assertEqual(fields, fields_expected)
 
     def test_when_has_specified_fields(self):
@@ -44,7 +44,7 @@ class WithOutBoxTestCase(TestCase):
             'username': 'test',
 
         }
-        use_with_outbox = with_outbox(queue='queue', fields=['email', 'username'])(User)
+        use_with_outbox = with_outbox(name='queue', fields=['email', 'username'])(User)
         use_with_outbox.objects.create(username='test', email='test@test.com')
-        fields = Outbox.objects.get().body[0]['fields']
+        fields = Published.objects.get().content['fields']
         self.assertEqual(fields, fields_expected)

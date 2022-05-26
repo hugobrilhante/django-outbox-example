@@ -8,6 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 def create_recommendation(payload: Payload) -> None:
-    if payload.body.get("description"):
-        Recommendation.objects.get_or_create(**payload.body)
+    if payload.body.get("pk"):
+        Recommendation.objects.get_or_create(content=payload.body)
         payload.ack()

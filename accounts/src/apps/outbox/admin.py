@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
 
-from .models import Outbox
+from .models import Published
+from .models import Received
 
-admin.site.register(Outbox, ModelAdmin, **{"list_display": ("queue", "body", "sent")})
+admin.site.register(Published, ModelAdmin, **{"list_display": ("name", "content", "status")})
+admin.site.register(Received, ModelAdmin, **{"list_display": ("name", "content", "status")})
